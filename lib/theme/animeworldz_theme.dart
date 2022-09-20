@@ -2,6 +2,6 @@ import "package:flutter/material.dart";
 
 ThemeData animeWorldzTheme = ThemeData(
   brightness: Brightness.dark,
-  scaffoldBackgroundColor: Colors.black87,
-  appBarTheme: const AppBarTheme(backgroundColor: Colors.black54),
+  scaffoldBackgroundColor: const Color(0xAA181818),
+  appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF181818)),
 );
