@@ -1,13 +1,26 @@
 import "package:flutter/material.dart";
+import 'package:animeworldz_flutter/Screens/details.dart';
+import 'package:animeworldz_flutter/Screens/search.dart';
+import 'package:animeworldz_flutter/Screens/watch.dart';
+import 'package:animeworldz_flutter/Screens/favourite.dart';
+import 'package:animeworldz_flutter/Screens/schedule.dart';
+import 'package:animeworldz_flutter/Screens/settings.dart';
 import "package:animeworldz_flutter/theme/animeworldz_theme.dart";
-import "package:animeworldz_flutter/Widgets/card.dart";
+import "package:animeworldz_flutter/Screens/Home.dart";
 
 void main() {
   runApp(MaterialApp(
-      title: "AnimeWorldZ",
-      debugShowCheckedModeBanner: false,
-      theme: animeWorldzTheme,
-      home: const AnimeWorldzApp()));
+    title: "AnimeWorld-Z",
+    debugShowCheckedModeBanner: false,
+    theme: animeWorldzTheme,
+    initialRoute: "/",
+    routes: {
+      "/": (context) => const AnimeWorldzApp(),
+      "/search": (context) => const Search(),
+      "/detail": (context) => const Details(),
+      "/watch": (context) => const WatchAnime()
+    },
+  ));
 }
 
 class AnimeWorldzApp extends StatefulWidget {
@@ -19,6 +32,12 @@ class AnimeWorldzApp extends StatefulWidget {
 
 class _AnimeWorldzAppState extends State<AnimeWorldzApp> {
   int currentIndex = 0;
+  List<Widget> screens = [
+    const Home(),
+    const Favourite(),
+    const Schedule(),
+    const Settings()
+  ];
 
   void onTap(int index) {
     setState(() {
@@ -37,57 +56,13 @@ class _AnimeWorldzAppState extends State<AnimeWorldzApp> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, "/search");
+            },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            const Text("Recent Release",
-                style: TextStyle(fontSize: 22.0, fontFamily: "Nunito")),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(children: const [
-                AnimeCard(
-                    title: "Overlord IV",
-                    image: "https://gogocdn.net/cover/overlord-iv.png",
-                    additionalInfo: "Episode 1"),
-                AnimeCard(
-                    title: "Overlord IV",
-                    image: "https://gogocdn.net/cover/overlord-iv.png",
-                    additionalInfo: "Episode 1"),
-                AnimeCard(
-                    title: "Overlord IV",
-                    image: "https://gogocdn.net/cover/overlord-iv.png",
-                    additionalInfo: "Episode 1"),
-              ]),
-            ),
-            const SizedBox(height: 20),
-            const Text("Popular Anime",
-                style: TextStyle(fontSize: 22.0, fontFamily: "Nunito")),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(children: const [
-                AnimeCard(
-                    title: "Overlord IV",
-                    image: "https://gogocdn.net/cover/overlord-iv.png",
-                    additionalInfo: "Released 2022"),
-                AnimeCard(
-                    title: "Overlord IV",
-                    image: "https://gogocdn.net/cover/overlord-iv.png",
-                    additionalInfo: "Released 2022"),
-                AnimeCard(
-                    title: "Overlord IV",
-                    image: "https://gogocdn.net/cover/overlord-iv.png",
-                    additionalInfo: "Released 2022"),
-              ]),
-            ),
-          ],
-        ),
-      ),
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,

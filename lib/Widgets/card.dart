@@ -25,23 +25,23 @@ class AnimeCard extends StatelessWidget {
                   children: [
                     Image.network(
                       image,
-                      height: 180,
+                      height: 200,
                       width: 150,
                       fit: BoxFit.cover,
                     ),
                     Container(
                       width: 150,
-                      height: 20,
+                      height: 25,
                       decoration: BoxDecoration(
                         color: Colors.amber[700],
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 2, 0, 2.5),
+                        padding: const EdgeInsets.fromLTRB(12, 2.5, 0, 2.5),
                         child: Text(
                           additionalInfo,
                           style: const TextStyle(
                               fontSize: 14,
-                              fontFamily: "Nunito",
+                              fontFamily: "OpenSans",
                               fontWeight: FontWeight.w400),
                         ),
                       ),
@@ -55,7 +55,7 @@ class AnimeCard extends StatelessWidget {
                   title,
                   style: const TextStyle(
                       fontSize: 16,
-                      fontFamily: "Nunito",
+                      fontFamily: "OpenSans",
                       fontWeight: FontWeight.w500),
                 ),
               ]),
