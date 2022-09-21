@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
                 title: e["name"],
                 additionalInfo: e['recent_episode'],
                 img: e['img'],
-                link: e['link']))
+                link: e['href']))
             .toList();
       } else {
         return [];
@@ -88,6 +88,7 @@ class _HomeState extends State<Home> {
                                 ? recent
                                     .map<Widget>((e) => AnimeCard(
                                         title: e.title,
+                                        link: e.link,
                                         image: e.img,
                                         additionalInfo: e.additionalInfo))
                                     .toList()
@@ -107,6 +108,7 @@ class _HomeState extends State<Home> {
                                     .map<Widget>((e) => AnimeCard(
                                         title: e.title,
                                         image: e.img,
+                                        link: e.link,
                                         additionalInfo: e.additionalInfo))
                                     .toList()
                                 : []),

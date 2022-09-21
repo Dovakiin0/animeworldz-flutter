@@ -27,7 +27,6 @@ class _SearchState extends State<Search> {
           Uri.parse("https://animeworldz.herokuapp.com/api/v1/anime/$value"));
       if (res.statusCode == 200) {
         List data = jsonDecode(res.body);
-        print(data);
         setState(() {
           _animes = data
               .map((e) => Anime(
@@ -99,6 +98,7 @@ class _SearchState extends State<Search> {
                               .map<Widget>((e) => AnimeCard(
                                     title: e.title,
                                     image: e.img,
+                                    link: e.link,
                                     additionalInfo: e.additionalInfo,
                                   ))
                               .toList())

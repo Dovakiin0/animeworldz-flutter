@@ -4,21 +4,24 @@ class AnimeCard extends StatelessWidget {
   final String title;
   final String image;
   final String additionalInfo;
+  final String link;
 
   const AnimeCard(
       {super.key,
       required this.title,
       required this.image,
-      required this.additionalInfo});
+      required this.additionalInfo,
+      required this.link});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 150,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
         child: InkWell(
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, "/detail",
+              arguments: {"link": link, "name": title}),
           child: Column(
             children: [
               ClipRRect(
@@ -56,7 +59,6 @@ class AnimeCard extends StatelessWidget {
                   Text(
                     title,
                     maxLines: 2,
-                    softWrap: true,
                     style: const TextStyle(
                         fontSize: 16,
                         fontFamily: "OpenSans",
