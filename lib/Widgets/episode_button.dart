@@ -1,20 +1,31 @@
 import "package:flutter/material.dart";
 
 class EpButton extends StatelessWidget {
-  final String episode;
+  final int episode;
   final String slug;
-  const EpButton({super.key, required this.episode, required this.slug});
+  final String name;
+  final int count;
+  const EpButton(
+      {super.key,
+      required this.episode,
+      required this.slug,
+      required this.name,
+      required this.count});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.pushNamed(context, "/watch",
-            arguments: {"slug": slug, "ep": episode});
+        Navigator.pushNamed(context, "/watch", arguments: {
+          "slug": slug,
+          "ep": episode,
+          "name": name,
+          "count": count
+        });
       },
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.amber[700])),
-      child: Text(episode),
+      child: Text(episode.toString()),
     );
   }
 }

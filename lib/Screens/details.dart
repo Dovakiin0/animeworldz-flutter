@@ -142,6 +142,7 @@ class _DetailsState extends State<Details> {
                                       style: const TextStyle(
                                           fontSize: 20.0,
                                           fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 10),
                                   SizedBox(
                                     height: 150,
                                     child: SingleChildScrollView(
@@ -161,12 +162,16 @@ class _DetailsState extends State<Details> {
                                     direction: Axis.horizontal,
                                     spacing: 10.0,
                                     children: [
-                                      for (int i = 1;
-                                          i <= int.parse(data.episodesCount);
-                                          i++)
+                                      for (int i =
+                                              int.parse(data.episodesCount);
+                                          i >= 1;
+                                          i--)
                                         EpButton(
-                                            episode: i.toString(),
-                                            slug: data.slug)
+                                            episode: i,
+                                            slug: data.slug,
+                                            name: data.title,
+                                            count:
+                                                int.parse(data.episodesCount)),
                                     ],
                                   )
                                 ],

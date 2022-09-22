@@ -37,3 +37,12 @@ class AnimeDetail {
       required this.otherName,
       required this.status});
 }
+
+class AnimeEpisode {
+  final String name;
+  final int episode;
+  final List<dynamic> links;
+
+  AnimeEpisode(
+      {required this.name, required this.episode, required this.links});
+}
