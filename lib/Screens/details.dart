@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:animeworldz_flutter/Layouts/layout.dart";
 import "package:http/http.dart" as http;
 import "package:animeworldz_flutter/Models/AnimeModel.dart";
+import "package:animeworldz_flutter/Widgets/episode_button.dart";
 import "dart:convert";
 
 class Details extends StatefulWidget {
@@ -23,7 +24,7 @@ class _DetailsState extends State<Details> {
           body: {"uri": arg["link"]});
       if (res.statusCode == 200) {
         Map data = jsonDecode(res.body);
-        List<dynamic> genres = data['genre'];
+        List<dynamic> genres = data['genre'] ?? [];
         return AnimeDetail(
           img: data["img"] ?? "https://s1.zerochan.net/Index.600.1156386.jpg",
           title: data["title"] ?? "N/A",
@@ -39,6 +40,10 @@ class _DetailsState extends State<Details> {
       }
     } catch (e) {
       print(e);
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Something went wrong"),
+      ));
       return null;
     }
     return null;
@@ -116,30 +121,58 @@ class _DetailsState extends State<Details> {
                               ),
                             ],
                           ),
-                          Wrap(
-                              spacing: 5.0,
-                              direction: Axis.horizontal,
-                              children: data.genres
-                                  .map((e) => Chip(
-                                        label: Text(e),
-                                        backgroundColor: Colors.amber[700],
-                                      ))
-                                  .toList()),
-                          const SizedBox(height: 10),
-                          Text("Plot Summary",
-                              style: const TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: 150,
+                          Expanded(
                             child: SingleChildScrollView(
                               scrollDirection: Axis.vertical,
-                              child: Text(data.plotSummary,
-                                  style: const TextStyle(fontSize: 15.0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Wrap(
+                                      spacing: 5.0,
+                                      direction: Axis.horizontal,
+                                      children: data.genres
+                                          .map((e) => Chip(
+                                                label: Text(e),
+                                                backgroundColor:
+                                                    Colors.amber[700],
+                                              ))
+                                          .toList()),
+                                  const SizedBox(height: 10),
+                                  Text("Plot Summary",
+                                      style: const TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(
+                                    height: 150,
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.vertical,
+                                      child: Text(data.plotSummary,
+                                          style:
+                                              const TextStyle(fontSize: 15.0)),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text("Episodes",
+                                      style: const TextStyle(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 10),
+                                  Wrap(
+                                    direction: Axis.horizontal,
+                                    spacing: 10.0,
+                                    children: [
+                                      for (int i = 1;
+                                          i <= int.parse(data.episodesCount);
+                                          i++)
+                                        EpButton(
+                                            episode: i.toString(),
+                                            slug: data.slug)
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Text("Episodes",
-                              style: const TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
+                          )
                         ],
                       ),
                     ),
