@@ -132,7 +132,10 @@ class _DetailsState extends State<Details> {
                                       direction: Axis.horizontal,
                                       children: data.genres
                                           .map((e) => Chip(
-                                                label: Text(e),
+                                                label: Text(e,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
                                                 backgroundColor:
                                                     Colors.amber[700],
                                               ))

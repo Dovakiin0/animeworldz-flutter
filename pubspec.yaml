@@ -1,5 +1,5 @@
 name: animeworldz_flutter
-description: A new Flutter project.
+description: Watch Anime with ease now
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -41,6 +41,22 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: "^0.10.0"
+  flutter_native_splash: ^2.2.9
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/adaptive-icon.png"
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: "assets/splash.png"
+  android: true
+  ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

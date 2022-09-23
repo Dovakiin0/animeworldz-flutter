@@ -25,7 +25,10 @@ class EpButton extends StatelessWidget {
       },
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Colors.amber[700])),
-      child: Text(episode.toString()),
+      child: Text(
+        episode.toString(),
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
