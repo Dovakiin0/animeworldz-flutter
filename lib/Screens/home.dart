@@ -5,11 +5,14 @@ import 'dart:ui';
 import "package:flutter/material.dart";
 import "package:animeworldz_flutter/Screens/loading.dart";
 import "package:animeworldz_flutter/Widgets/card.dart";
+import 'package:flutter/services.dart';
 import "package:http/http.dart" as http;
 import "package:animeworldz_flutter/Models/AnimeModel.dart";
 import "package:package_info_plus/package_info_plus.dart";
 import "package:flutter_downloader/flutter_downloader.dart";
 import "dart:convert";
+import "package:path_provider/path_provider.dart";
+import 'package:permission_handler/permission_handler.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,6 +22,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future downloadUpdate(String url) async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      final baseStorage = await getExternalStorageDirectory();
+      await FlutterDownloader.enqueue(
+        url: url,
+        headers: {}, // optional: header send with url (auth token etc)
+        savedDir: baseStorage!.path,
+        showNotification:
+            true, // show download progress in status bar (for Android)
+        openFileFromNotification:
+            true, // click on notification to open downloaded file (for Android)
+      );
+      SystemNavigator.pop();
+    }
+  }
+
   Future<List<Anime>> getRecentAnime() async {
     try {
       http.Response res = await http.get(
@@ -72,10 +92,11 @@ class _HomeState extends State<Home> {
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {});
+      // String id = data[0];
+      // DownloadTaskStatus status = data[1];
+      // int progress = data[2];
+
+      // setState(() {});
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -116,16 +137,7 @@ class _HomeState extends State<Home> {
               label: "Update",
               textColor: Colors.white,
               onPressed: () async {
-                await FlutterDownloader.enqueue(
-                  url: data['release'],
-                  headers: {}, // optional: header send with url (auth token etc)
-                  savedDir:
-                      'the path of directory where you want to save downloaded files',
-                  showNotification:
-                      true, // show download progress in status bar (for Android)
-                  openFileFromNotification:
-                      true, // click on notification to open downloaded file (for Android)
-                );
+                await downloadUpdate(data['release']);
               },
             ),
           ));
