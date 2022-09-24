@@ -6,6 +6,7 @@ import "package:http/http.dart" as http;
 import "package:animeworldz_flutter/Models/AnimeModel.dart";
 import "package:animeworldz_flutter/Widgets/episode_button.dart";
 import "dart:convert";
+import "package:shared_preferences/shared_preferences.dart";
 
 class Details extends StatefulWidget {
   const Details({super.key});
@@ -16,6 +17,7 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   Map args = {};
+  bool _isFavourite = false;
 
   Future<AnimeDetail?> getAnimeDetails(arg) async {
     try {
@@ -49,19 +51,62 @@ class _DetailsState extends State<Details> {
     return null;
   }
 
+  void toggleFavourite(AnimeDetail details) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.containsKey(details.title)) {
+        prefs.remove(details.title);
+        setState(() {
+          _isFavourite = false;
+        });
+      } else {
+        prefs.setString(
+            details.title,
+            jsonEncode({
+              "title": details.title,
+              "link": "/category/${details.slug}",
+              "img": details.img,
+              "released": details.released,
+            }).toString());
+        setState(() {
+          _isFavourite = true;
+        });
+      }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Something went wrong"),
+      ));
+    }
+  }
+
+  Future<bool> checkFavourite(args) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      print(prefs.getKeys());
+      if (prefs.containsKey(args["name"])) {
+        _isFavourite = true;
+        return true;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)!.settings.arguments as Map;
     return AnimeWorldzLayout(
         label: args['name'],
         child: FutureBuilder(
-          future: getAnimeDetails(args),
-          builder: (context, snapshot) {
+          future: Future.wait([checkFavourite(args), getAnimeDetails(args)]),
+          builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return const Loading();
               case ConnectionState.done:
-                AnimeDetail data = snapshot.data!;
+                AnimeDetail data = snapshot.data![1] as AnimeDetail;
                 return Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -119,12 +164,19 @@ class _DetailsState extends State<Details> {
                                     Row(
                                       children: [
                                         IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              toggleFavourite(data);
+                                            },
                                             icon: Icon(
-                                              Icons.watch_later_outlined,
+                                              _isFavourite
+                                                  ? Icons.favorite
+                                                  : Icons
+                                                      .favorite_border_outlined,
                                               color: Colors.amber[700],
                                             )),
-                                        const Text("Add to Watch Later")
+                                        Text(_isFavourite
+                                            ? "Remove From Favourite"
+                                            : "Add To Favourite")
                                       ],
                                     )
                                   ],

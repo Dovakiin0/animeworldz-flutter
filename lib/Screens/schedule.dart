@@ -49,6 +49,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 7, vsync: this);
+    _tabController.animateTo(DateTime.now().weekday);
     return FutureBuilder(
         future: getSchedule(),
         builder: (context, snapshot) {
@@ -57,7 +58,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
               return const Loading();
             case ConnectionState.done:
               AnimeSchedule? schedule = snapshot.data!;
-              print(schedule.monday);
               return Column(
                 children: [
                   TabBar(
@@ -67,16 +67,34 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                               BorderSide(color: Colors.amber[700]!, width: 2)),
                       isScrollable: true,
                       tabs: [
+                        Tab(text: "Sunday"),
                         Tab(text: "Monday"),
                         Tab(text: "Tuesday"),
                         Tab(text: "Wednesday"),
                         Tab(text: "Thursday"),
                         Tab(text: "Friday"),
                         Tab(text: "Saturday"),
-                        Tab(text: "Sunday"),
                       ]),
                   Expanded(
                     child: TabBarView(controller: _tabController, children: [
+                      SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Center(
+                          child: Wrap(
+                              direction: Axis.horizontal,
+                              spacing: 30,
+                              children: schedule.sunday
+                                  .map(
+                                    (anime) => AnimeCard(
+                                      title: anime["title"],
+                                      additionalInfo: convertLocalTime(
+                                          anime['airing_time']),
+                                      image: anime['img'],
+                                    ),
+                                  )
+                                  .toList()),
+                        ),
+                      ),
                       SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Center(
@@ -174,24 +192,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
                               direction: Axis.horizontal,
                               spacing: 30,
                               children: schedule.saturday
-                                  .map(
-                                    (anime) => AnimeCard(
-                                      title: anime["title"],
-                                      additionalInfo: convertLocalTime(
-                                          anime['airing_time']),
-                                      image: anime['img'],
-                                    ),
-                                  )
-                                  .toList()),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Center(
-                          child: Wrap(
-                              direction: Axis.horizontal,
-                              spacing: 30,
-                              children: schedule.sunday
                                   .map(
                                     (anime) => AnimeCard(
                                       title: anime["title"],
