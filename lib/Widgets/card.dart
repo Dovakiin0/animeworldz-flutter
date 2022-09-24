@@ -4,14 +4,14 @@ class AnimeCard extends StatelessWidget {
   final String title;
   final String image;
   final String additionalInfo;
-  final String link;
+  final String? link;
 
   const AnimeCard(
       {super.key,
       required this.title,
       required this.image,
       required this.additionalInfo,
-      required this.link});
+      this.link});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,10 @@ class AnimeCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
         child: InkWell(
-          onTap: () => Navigator.pushNamed(context, "/detail",
-              arguments: {"link": link, "name": title}),
+          onTap: () => link != null
+              ? Navigator.pushNamed(context, "/detail",
+                  arguments: {"link": link, "name": title})
+              : {},
           child: Column(
             children: [
               ClipRRect(

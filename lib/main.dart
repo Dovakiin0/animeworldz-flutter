@@ -1,3 +1,4 @@
+import 'package:animeworldz_flutter/Screens/web_view_external.dart';
 import "package:flutter/material.dart";
 import 'package:animeworldz_flutter/Screens/details.dart';
 import 'package:animeworldz_flutter/Screens/search.dart';
@@ -23,6 +24,7 @@ void main() async {
       "/search": (context) => const Search(),
       "/detail": (context) => const Details(),
       "/watch": (context) => const WatchAnime(),
+      "/external": (context) => const WebViewExternal()
     },
   ));
 }

@@ -116,6 +116,17 @@ class _DetailsState extends State<Details> {
                                         maxLines: 3,
                                         softWrap: true,
                                         style: const TextStyle(fontSize: 15.0)),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.watch_later_outlined,
+                                              color: Colors.amber[700],
+                                            )),
+                                        const Text("Add to Watch Later")
+                                      ],
+                                    )
                                   ],
                                 ),
                               ),

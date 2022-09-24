@@ -46,3 +46,22 @@ class AnimeEpisode {
   AnimeEpisode(
       {required this.name, required this.episode, required this.links});
 }
+
+class AnimeSchedule {
+  final List<dynamic> monday;
+  final List<dynamic> tuesday;
+  final List<dynamic> wednesday;
+  final List<dynamic> thursday;
+  final List<dynamic> friday;
+  final List<dynamic> saturday;
+  final List<dynamic> sunday;
+
+  AnimeSchedule(
+      {required this.monday,
+      required this.tuesday,
+      required this.wednesday,
+      required this.thursday,
+      required this.friday,
+      required this.saturday,
+      required this.sunday});
+}
