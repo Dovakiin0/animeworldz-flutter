@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 import 'dart:isolate';
 import 'dart:ui';
-
+import "dart:io";
 import "package:flutter/material.dart";
 import "package:animeworldz_flutter/Screens/loading.dart";
 import "package:animeworldz_flutter/Widgets/card.dart";
@@ -26,14 +26,16 @@ class _HomeState extends State<Home> {
     var status = await Permission.storage.request();
     if (status.isGranted) {
       final baseStorage = await getExternalStorageDirectory();
+      final savePath = baseStorage!.path + "/AnimeWorldz.apk";
+      if (await File(savePath).exists()) {
+        await File(savePath).delete();
+      }
       await FlutterDownloader.enqueue(
         url: url,
-        headers: {}, // optional: header send with url (auth token etc)
-        savedDir: baseStorage!.path,
-        showNotification:
-            true, // show download progress in status bar (for Android)
-        openFileFromNotification:
-            true, // click on notification to open downloaded file (for Android)
+        savedDir: baseStorage.path,
+        fileName: "AnimeWorldz.apk",
+        showNotification: true,
+        openFileFromNotification: true,
       );
       SystemNavigator.pop();
     }
@@ -124,7 +126,7 @@ class _HomeState extends State<Home> {
           "https://raw.githubusercontent.com/Dovakiin0/animeworldz-mobile/master/current_version.json"));
       if (res.statusCode == 200) {
         Map data = jsonDecode(res.body);
-        if (data["current_version"] != version) {
+        if (data["current_version"] == version) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
                 "New update available! Version ${data["current_version"]}",
