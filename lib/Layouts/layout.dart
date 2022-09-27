@@ -20,3 +20,27 @@ class AnimeWorldzLayout extends StatelessWidget {
     );
   }
 }
+
+class AnimeWorldzFAB extends StatelessWidget {
+  final Widget child;
+  final Function onPressed;
+  const AnimeWorldzFAB(
+      {super.key, required this.child, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.amber[700],
+        onPressed: () {
+          onPressed();
+        },
+        child: Icon(
+          Icons.filter_alt_outlined,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}

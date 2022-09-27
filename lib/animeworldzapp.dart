@@ -3,6 +3,7 @@ import 'package:animeworldz_flutter/Screens/favourite.dart';
 import 'package:animeworldz_flutter/Screens/schedule.dart';
 import 'package:animeworldz_flutter/Screens/settings.dart';
 import "package:animeworldz_flutter/Screens/Home.dart";
+import "package:animeworldz_flutter/Screens/waifu.dart";
 
 class AnimeWorldzApp extends StatefulWidget {
   const AnimeWorldzApp({super.key});
@@ -17,6 +18,7 @@ class _AnimeWorldzAppState extends State<AnimeWorldzApp> {
     const Home(),
     const Favourite(),
     const Schedule(),
+    const Waifu(),
     const Settings()
   ];
 
@@ -68,8 +70,12 @@ class _AnimeWorldzAppState extends State<AnimeWorldzApp> {
             label: 'Schedule',
           ),
           BottomNavigationBarItem(
+            icon: Icon(currentIndex == 3 ? Icons.image : Icons.image_outlined),
+            label: 'Waifu',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(
-                currentIndex == 3 ? Icons.settings : Icons.settings_outlined),
+                currentIndex == 4 ? Icons.settings : Icons.settings_outlined),
             label: 'Settings',
           ),
         ],

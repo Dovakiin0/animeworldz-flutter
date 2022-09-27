@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
           "https://raw.githubusercontent.com/Dovakiin0/animeworldz-mobile/master/current_version.json"));
       if (res.statusCode == 200) {
         Map data = jsonDecode(res.body);
-        if (data["current_version"] == version) {
+        if (data["current_version"] != version) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
                 "New update available! Version ${data["current_version"]}",
