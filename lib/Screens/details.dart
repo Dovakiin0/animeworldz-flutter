@@ -18,6 +18,7 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   Map args = {};
   bool _isFavourite = false;
+  List<dynamic> watched_eps = [];
 
   Future<AnimeDetail?> getAnimeDetails(arg) async {
     try {
@@ -80,10 +81,16 @@ class _DetailsState extends State<Details> {
     }
   }
 
-  Future<bool> checkFavourite(args) async {
+  Future<bool> checkPrefs(args) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      print(prefs.getKeys());
+      if (prefs.containsKey("watched")) {
+        Map watched = jsonDecode(prefs.getString("watched")!);
+        if (watched.containsKey(args["name"])) {
+          watched_eps = watched[args["name"]];
+        }
+      }
+      print(watched_eps);
       if (prefs.containsKey(args["name"])) {
         _isFavourite = true;
         return true;
@@ -94,13 +101,52 @@ class _DetailsState extends State<Details> {
     return false;
   }
 
+  void epCallback(String slug, int episode, String name, int count) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.containsKey("watched")) {
+        Map data = jsonDecode(prefs.getString("watched")!);
+        if (data.containsKey(args["name"])) {
+          List<dynamic> watched = data[args["name"]];
+          var contain = watched.where((element) => element == episode);
+          if (contain.isEmpty) {
+            watched.add(episode);
+          }
+          data[args["name"]] = watched;
+          prefs.setString("watched", jsonEncode(data).toString());
+        } else {
+          prefs.setString(
+              "watched",
+              jsonEncode({
+                args["name"]: [episode],
+                ...data,
+              }).toString());
+        }
+      } else {
+        prefs.setString(
+            "watched",
+            jsonEncode({
+              args["name"]: [episode]
+            }).toString());
+      }
+      Navigator.pushNamed(context, "/watch", arguments: {
+        "slug": slug,
+        "ep": episode,
+        "name": name,
+        "count": count
+      }).whenComplete(() => setState(() => {}));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)!.settings.arguments as Map;
     return AnimeWorldzLayout(
         label: args['name'],
         child: FutureBuilder(
-          future: Future.wait([checkFavourite(args), getAnimeDetails(args)]),
+          future: Future.wait([checkPrefs(args), getAnimeDetails(args)]),
           builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -233,11 +279,13 @@ class _DetailsState extends State<Details> {
                                           i >= 1;
                                           i--)
                                         EpButton(
-                                            episode: i,
-                                            slug: data.slug,
-                                            name: data.title,
-                                            count:
-                                                int.parse(data.episodesCount)),
+                                          episode: i,
+                                          slug: data.slug,
+                                          name: data.title,
+                                          count: int.parse(data.episodesCount),
+                                          callback: epCallback,
+                                          watched: watched_eps.contains(i),
+                                        ),
                                     ],
                                   )
                                 ],

@@ -5,26 +5,28 @@ class EpButton extends StatelessWidget {
   final String slug;
   final String name;
   final int count;
-  const EpButton(
-      {super.key,
-      required this.episode,
-      required this.slug,
-      required this.name,
-      required this.count});
+  final Function(String, int, String, int) callback;
+  final bool watched;
+
+  const EpButton({
+    super.key,
+    required this.episode,
+    required this.slug,
+    required this.name,
+    required this.count,
+    required this.watched,
+    required this.callback,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.pushNamed(context, "/watch", arguments: {
-          "slug": slug,
-          "ep": episode,
-          "name": name,
-          "count": count
-        });
+      onPressed: () async {
+        callback(slug, episode, name, count);
       },
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.amber[700])),
+          backgroundColor: MaterialStateProperty.all(
+              watched ? Colors.grey[500] : Colors.amber[700])),
       child: Text(
         episode.toString(),
         style: TextStyle(fontWeight: FontWeight.bold),
@@ -32,3 +34,10 @@ class EpButton extends StatelessWidget {
     );
   }
 }
+
+/*
+watched: {
+  "title-anime": [0,1,2,3]
+}
+
+*/

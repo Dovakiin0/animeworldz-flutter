@@ -17,6 +17,7 @@ class _FavouriteState extends State<Favourite> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<Anime> animes = [];
     prefs.getKeys().forEach((key) {
+      if (key == "watched") return;
       Map<String, dynamic> fav = jsonDecode(prefs.getString(key).toString());
       animes.add(Anime(
           title: fav["title"],
@@ -37,10 +38,9 @@ class _FavouriteState extends State<Favourite> {
           case ConnectionState.waiting:
             return const Loading();
           case ConnectionState.done:
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Padding(
-                padding: const EdgeInsets.all(30.0),
+            return Center(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Wrap(
                     direction: Axis.horizontal,
                     spacing: 30,
