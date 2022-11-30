@@ -31,7 +31,7 @@ class _WatchAnimeState extends State<WatchAnime> {
       reqBody["ep"] = args["ep"];
       reqBody["slug"] = args["slug"];
       http.Response res = await http.post(
-          Uri.parse("https://animeworldz.herokuapp.com/api/v1/anime/episode"),
+          Uri.parse("https://animeworldz.onrender.com/api/v1/anime/episode"),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(reqBody));
       if (res.statusCode == 200) {

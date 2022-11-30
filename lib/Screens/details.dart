@@ -23,7 +23,7 @@ class _DetailsState extends State<Details> {
   Future<AnimeDetail?> getAnimeDetails(arg) async {
     try {
       http.Response res = await http.post(
-          Uri.parse("https://animeworldz.herokuapp.com/api/v1/anime"),
+          Uri.parse("https://animeworldz.onrender.com/api/v1/anime"),
           body: {"uri": arg["link"]});
       if (res.statusCode == 200) {
         Map data = jsonDecode(res.body);

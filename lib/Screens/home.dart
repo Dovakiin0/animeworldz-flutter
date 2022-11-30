@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
   Future<List<Anime>> getRecentAnime() async {
     try {
       http.Response res = await http.get(
-          Uri.parse("https://animeworldz.herokuapp.com/api/v1/anime/recent/1"));
+          Uri.parse("https://animeworldz.onrender.com/api/v1/anime/recent/1"));
       if (res.statusCode == 200) {
         List data = jsonDecode(res.body);
         return data
@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
   Future<List<Anime>> getPopularAnime() async {
     try {
       http.Response res = await http.get(Uri.parse(
-          "https://animeworldz.herokuapp.com/api/v1/anime/popular/1"));
+          "https://animeworldz.onrender.com/api/v1/anime/popular/1"));
       if (res.statusCode == 200) {
         List data = jsonDecode(res.body);
         return data

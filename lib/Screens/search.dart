@@ -24,7 +24,7 @@ class _SearchState extends State<Search> {
         _loading = true;
       });
       http.Response res = await http.get(
-          Uri.parse("https://animeworldz.herokuapp.com/api/v1/anime/$value"));
+          Uri.parse("https://animeworldz.onrender.com/api/v1/anime/$value"));
       if (res.statusCode == 200) {
         List data = jsonDecode(res.body);
         setState(() {

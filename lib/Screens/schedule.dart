@@ -24,7 +24,7 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
   Future<AnimeSchedule?> getSchedule() async {
     try {
       http.Response res = await http.post(
-          Uri.parse("https://animeworldz.herokuapp.com/api/v1/schedule"),
+          Uri.parse("https://animeworldz.onrender.com/api/v1/schedule"),
           body: {"day": ""});
       if (res.statusCode == 200) {
         Map data = jsonDecode(res.body);
