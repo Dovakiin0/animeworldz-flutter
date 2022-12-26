@@ -1,3 +1,7 @@
+/*
+  DEPRECATED
+*/
+
 import 'package:animeworldz_flutter/Screens/loading.dart';
 import "package:flutter/material.dart";
 import "dart:convert";
@@ -57,7 +61,6 @@ class _ScheduleState extends State<Schedule> with TickerProviderStateMixin {
             case ConnectionState.waiting:
               return const Loading();
             case ConnectionState.done:
-              return Center(child: Text("Deprecated!"));
               AnimeSchedule schedule = snapshot.data!;
               return Column(
                 children: [

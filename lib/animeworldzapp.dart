@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:animeworldz_flutter/Screens/favourite.dart';
-import 'package:animeworldz_flutter/Screens/schedule.dart';
+// import 'package:animeworldz_flutter/Screens/schedule.dart';
 import 'package:animeworldz_flutter/Screens/settings.dart';
 import "package:animeworldz_flutter/Screens/Home.dart";
 import "package:animeworldz_flutter/Screens/waifu.dart";
@@ -17,7 +17,7 @@ class _AnimeWorldzAppState extends State<AnimeWorldzApp> {
   List<Widget> screens = [
     const Home(),
     const Favourite(),
-    const Schedule(),
+    // const Schedule(),
     const Waifu(),
     const Settings()
   ];
@@ -63,19 +63,19 @@ class _AnimeWorldzAppState extends State<AnimeWorldzApp> {
                 currentIndex == 1 ? Icons.favorite : Icons.favorite_outline),
             label: 'Favourites',
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(currentIndex == 2
+          //       ? Icons.watch_later
+          //       : Icons.watch_later_outlined),
+          //   label: 'Schedule',
+          // ),
           BottomNavigationBarItem(
-            icon: Icon(currentIndex == 2
-                ? Icons.watch_later
-                : Icons.watch_later_outlined),
-            label: 'Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(currentIndex == 3 ? Icons.image : Icons.image_outlined),
+            icon: Icon(currentIndex == 2 ? Icons.image : Icons.image_outlined),
             label: 'Waifu',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-                currentIndex == 4 ? Icons.settings : Icons.settings_outlined),
+                currentIndex == 3 ? Icons.settings : Icons.settings_outlined),
             label: 'Settings',
           ),
         ],
