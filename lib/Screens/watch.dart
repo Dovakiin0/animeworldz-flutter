@@ -53,8 +53,7 @@ class _WatchAnimeState extends State<WatchAnime> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     args = ModalRoute.of(context)!.settings.arguments as Map;
     return FutureBuilder(
       future: getEpisode(args),
