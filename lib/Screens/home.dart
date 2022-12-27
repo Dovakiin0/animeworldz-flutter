@@ -13,6 +13,7 @@ import "package:flutter_downloader/flutter_downloader.dart";
 import "dart:convert";
 import "package:path_provider/path_provider.dart";
 import 'package:permission_handler/permission_handler.dart';
+import "package:animeworldz_flutter/Helper/constant.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -41,19 +42,16 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<List<Anime>> getRecentAnime() async {
+  Future<List<RecentAnime>> getRecentAnime() async {
     try {
-      http.Response res = await http.get(
-          Uri.parse("https://animeworldz.onrender.com/api/v1/anime/recent/1"));
+      http.Response res =
+          await http.get(Uri.parse(API_URI + "/recent-episodes"));
       if (res.statusCode == 200) {
-        List data = jsonDecode(res.body);
-        return data
-            .map((e) => Anime(
-                title: e["name"],
-                additionalInfo: e['recent_episode'],
-                img: e['img'],
-                link: e['href']))
+        Map<String, dynamic> data = jsonDecode(res.body);
+        List<RecentAnime> recentAnime = data["results"]
+            .map<RecentAnime>((e) => RecentAnime.fromJson(e))
             .toList();
+        return recentAnime;
       } else {
         return [];
       }
@@ -63,19 +61,15 @@ class _HomeState extends State<Home> {
     return [];
   }
 
-  Future<List<Anime>> getPopularAnime() async {
+  Future<List<TopAiringAnime>> getPopularAnime() async {
     try {
-      http.Response res = await http.get(Uri.parse(
-          "https://animeworldz.onrender.com/api/v1/anime/popular/1"));
+      http.Response res = await http.get(Uri.parse(API_URI + "/top-airing"));
       if (res.statusCode == 200) {
-        List data = jsonDecode(res.body);
-        return data
-            .map((e) => Anime(
-                title: e["name"],
-                additionalInfo: e['release'],
-                img: e['img'],
-                link: e['link']))
+        Map<String, dynamic> data = jsonDecode(res.body);
+        List<TopAiringAnime> topAiringAnime = data["results"]
+            .map<TopAiringAnime>((e) => TopAiringAnime.fromJson(e))
             .toList();
+        return topAiringAnime;
       } else {
         return [];
       }
@@ -160,8 +154,8 @@ class _HomeState extends State<Home> {
             case ConnectionState.waiting:
               return const Loading();
             case ConnectionState.done:
-              List recent = snapshot.data![0];
-              List popular = snapshot.data![1];
+              List<RecentAnime> recent = snapshot.data![0];
+              List<TopAiringAnime> popular = snapshot.data![1];
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: SingleChildScrollView(
@@ -181,9 +175,10 @@ class _HomeState extends State<Home> {
                                 ? recent
                                     .map<Widget>((e) => AnimeCard(
                                         title: e.title,
-                                        link: e.link,
-                                        image: e.img,
-                                        additionalInfo: e.additionalInfo))
+                                        link: e.id,
+                                        image: e.image,
+                                        additionalInfo: "Episode " +
+                                            e.episodeNumber.toString()))
                                     .toList()
                                 : []),
                       ),
@@ -200,9 +195,9 @@ class _HomeState extends State<Home> {
                                 ? popular
                                     .map<Widget>((e) => AnimeCard(
                                         title: e.title,
-                                        image: e.img,
-                                        link: e.link,
-                                        additionalInfo: e.additionalInfo))
+                                        image: e.image,
+                                        link: e.id,
+                                        additionalInfo: ""))
                                     .toList()
                                 : []),
                       ),

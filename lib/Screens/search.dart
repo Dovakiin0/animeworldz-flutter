@@ -5,6 +5,7 @@ import "package:animeworldz_flutter/Layouts/layout.dart";
 import "package:http/http.dart" as http;
 import "dart:convert";
 import "package:animeworldz_flutter/Models/AnimeModel.dart";
+import "package:animeworldz_flutter/Helper/constant.dart";
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -16,24 +17,19 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   final _controller = TextEditingController();
   bool _loading = false;
-  List<Anime> _animes = [];
+  List<SearchAnime> _animes = [];
 
   Future<void> getSearchAnime(String value) async {
     try {
       setState(() {
         _loading = true;
       });
-      http.Response res = await http.get(
-          Uri.parse("https://animeworldz.onrender.com/api/v1/anime/$value"));
+      http.Response res = await http.get(Uri.parse(API_URI + "/$value?page=1"));
       if (res.statusCode == 200) {
-        List data = jsonDecode(res.body);
+        Map<String, dynamic> data = jsonDecode(res.body);
         setState(() {
-          _animes = data
-              .map((e) => Anime(
-                  title: e["title"],
-                  additionalInfo: "Released: ${e['released']}",
-                  img: e['img'],
-                  link: e['link']))
+          _animes = data["results"]
+              .map<SearchAnime>((e) => SearchAnime.fromJson(e))
               .toList();
           _loading = false;
         });
@@ -97,9 +93,9 @@ class _SearchState extends State<Search> {
                           children: _animes
                               .map<Widget>((e) => AnimeCard(
                                     title: e.title,
-                                    image: e.img,
-                                    link: e.link,
-                                    additionalInfo: e.additionalInfo,
+                                    image: e.image,
+                                    link: e.id,
+                                    additionalInfo: e.releaseDate,
                                   ))
                               .toList())
                       : _loading

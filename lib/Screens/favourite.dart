@@ -3,6 +3,7 @@ import 'package:animeworldz_flutter/Screens/loading.dart';
 import "package:flutter/material.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "dart:convert";
+import 'package:animeworldz_flutter/Helper/constant.dart' as AnimeHelper;
 import "package:animeworldz_flutter/Widgets/card.dart";
 
 class Favourite extends StatefulWidget {
@@ -30,7 +31,6 @@ class _FavouriteState extends State<Favourite> {
 
   @override
   Widget build(BuildContext context) {
-    getFavourites();
     return FutureBuilder(
       future: getFavourites(),
       builder: ((context, snapshot) {
