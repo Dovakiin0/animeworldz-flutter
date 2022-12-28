@@ -47,7 +47,7 @@ android {
         applicationId "com.dovakiin.animeworldz"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -58,7 +58,7 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
         }
     }
@@ -70,4 +70,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.2'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.18.2'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.2'
 }

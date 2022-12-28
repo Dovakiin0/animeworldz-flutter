@@ -1,14 +1,13 @@
 import 'package:animeworldz_flutter/Screens/loading.dart';
 import "package:flutter/material.dart";
 import "package:animeworldz_flutter/Layouts/layout.dart";
-import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
-import "package:chewie/chewie.dart";
+// import 'package:video_player/video_player.dart';
+// import "package:chewie/chewie.dart";
 import "package:animeworldz_flutter/Models/AnimeModel.dart";
 import "package:http/http.dart" as http;
 import "package:animeworldz_flutter/Helper/constant.dart";
 import "dart:convert";
-import "dart:io";
+import "package:flutter_vlc_player/flutter_vlc_player.dart";
 
 class WatchAnime extends StatefulWidget {
   const WatchAnime({super.key});
@@ -19,13 +18,10 @@ class WatchAnime extends StatefulWidget {
 
 class _WatchAnimeState extends State<WatchAnime> {
   Map args = {};
-  late VideoPlayerController videoPlayerController;
-  ChewieController? chewieController;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  // late VideoPlayerController videoPlayerController;
+  // ChewieController? chewieController;
+  late String currentSource;
+  VlcPlayerController? _videoViewController;
 
   Future<List<EpisodeSources>> getEpisode(args) async {
     try {
@@ -39,6 +35,8 @@ class _WatchAnimeState extends State<WatchAnime> {
         List<EpisodeSources> sources = data["sources"]
             .map<EpisodeSources>((e) => EpisodeSources.fromJson(e))
             .toList();
+        currentSource = sources[0].url;
+        await _initPlayer(currentSource);
         return sources;
       } else {
         return [];
@@ -49,37 +47,45 @@ class _WatchAnimeState extends State<WatchAnime> {
     }
   }
 
-  void _initPlayer(String currentSource) async {
-    videoPlayerController = VideoPlayerController.network(currentSource);
-    await videoPlayerController.initialize();
-    chewieController = ChewieController(
-      videoPlayerController: videoPlayerController,
-      aspectRatio: 16 / 9,
-      autoPlay: true,
-      looping: false,
-      allowFullScreen: true,
-      allowMuting: true,
-      allowPlaybackSpeedChanging: true,
-      showControls: true,
-      showControlsOnInitialize: true,
-      // materialProgressColors: ChewieProgressColors(
-      //   playedColor: Colors.amber[700],
-      //   handleColor: Colors.amber[700],
-      //   backgroundColor: Colors.grey,
-      //   bufferedColor: Colors.amber[700],
-      // ),
-      placeholder: const Center(
-        child: Loading(),
-      ),
-      autoInitialize: true,
-    );
+  Future<void> _initPlayer(String currentSource) async {
+    // videoPlayerController = VideoPlayerController.network(
+    //     "https://wwwx16.gofcdn.com/videos/hls/7ijsY8JlZk-qqw95i2P8NA/1672162453/193235/7c84129bc367b093eef803077c63241b/ep.36.1666964540.1080.m3u8");
+    // await Future.wait([
+    //   videoPlayerController.initialize(),
+    // ]);
+    // chewieController = ChewieController(
+    //   videoPlayerController: videoPlayerController,
+    //   aspectRatio: 16 / 9,
+    //   autoPlay: true,
+    //   looping: false,
+    //   allowFullScreen: true,
+    //   allowMuting: true,
+    //   // allowPlaybackSpeedChanging: true,
+    //   showControls: true,
+    //   showControlsOnInitialize: true,
+    //   materialProgressColors: ChewieProgressColors(
+    //     playedColor: Colors.amber,
+    //     handleColor: Colors.amber,
+    //     backgroundColor: Colors.grey,
+    //     bufferedColor: Colors.amber,
+    //   ),
+    // );
+    _videoViewController = VlcPlayerController.network(currentSource,
+        hwAcc: HwAcc.auto, autoPlay: true, options: VlcPlayerOptions());
   }
 
   @override
-  void dispose() {
-    videoPlayerController.dispose();
-    chewieController?.dispose();
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
     super.dispose();
+    _videoViewController!.stopRendererScanning();
+    _videoViewController!.dispose();
+    // videoPlayerController.dispose();
+    // chewieController?.dispose();
   }
 
   @override
@@ -95,20 +101,25 @@ class _WatchAnimeState extends State<WatchAnime> {
             case ConnectionState.waiting:
               return const Loading();
             case ConnectionState.done:
-              List<EpisodeSources> data = snapshot.data as List<EpisodeSources>;
-              String currentSource = data[0].url;
-              _initPlayer(currentSource);
+              // List<EpisodeSources> data = snapshot.data as List<EpisodeSources>;
               return Column(
                 children: [
-                  Expanded(
-                    child: chewieController == null
-                        ? const Loading()
-                        : SizedBox(
-                            child: Chewie(
-                              controller: chewieController!,
-                            ),
-                          ),
-                  ),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      child: _videoViewController != null
+                          ? VlcPlayer(
+                              controller: _videoViewController!,
+                              aspectRatio: 16 / 9,
+                            )
+                          : const Loading()),
+                  // SizedBox(
+                  //     height: MediaQuery.of(context).size.height * 0.3,
+                  //     child: chewieController != null
+                  //         ? Chewie(
+                  //             controller: chewieController!,
+                  //           )
+                  //         : const Loading()),
+
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

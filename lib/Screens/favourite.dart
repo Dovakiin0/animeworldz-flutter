@@ -3,7 +3,6 @@ import 'package:animeworldz_flutter/Screens/loading.dart';
 import "package:flutter/material.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "dart:convert";
-import 'package:animeworldz_flutter/Helper/constant.dart' as AnimeHelper;
 import "package:animeworldz_flutter/Widgets/card.dart";
 
 class Favourite extends StatefulWidget {
