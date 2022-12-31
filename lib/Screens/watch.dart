@@ -1,13 +1,11 @@
 import 'package:animeworldz_flutter/Screens/loading.dart';
 import "package:flutter/material.dart";
 import "package:animeworldz_flutter/Layouts/layout.dart";
-// import 'package:video_player/video_player.dart';
-// import "package:chewie/chewie.dart";
 import "package:animeworldz_flutter/Models/AnimeModel.dart";
 import "package:http/http.dart" as http;
 import "package:animeworldz_flutter/Helper/constant.dart";
 import "dart:convert";
-import "package:flutter_vlc_player/flutter_vlc_player.dart";
+import 'package:fijkplayer/fijkplayer.dart';
 
 class WatchAnime extends StatefulWidget {
   const WatchAnime({super.key});
@@ -18,10 +16,8 @@ class WatchAnime extends StatefulWidget {
 
 class _WatchAnimeState extends State<WatchAnime> {
   Map args = {};
-  // late VideoPlayerController videoPlayerController;
-  // ChewieController? chewieController;
-  late String currentSource;
-  VlcPlayerController? _videoViewController;
+  late EpisodeSources currentSource;
+  final FijkPlayer _player = FijkPlayer();
 
   Future<List<EpisodeSources>> getEpisode(args) async {
     try {
@@ -35,8 +31,16 @@ class _WatchAnimeState extends State<WatchAnime> {
         List<EpisodeSources> sources = data["sources"]
             .map<EpisodeSources>((e) => EpisodeSources.fromJson(e))
             .toList();
-        currentSource = sources[0].url;
-        await _initPlayer(currentSource);
+
+        for (EpisodeSources source in sources) {
+          if (source.quality == "default") {
+            currentSource = source;
+            break;
+          } else {
+            currentSource = sources[0];
+          }
+        }
+        _updatePlayerSource(currentSource);
         return sources;
       } else {
         return [];
@@ -47,45 +51,22 @@ class _WatchAnimeState extends State<WatchAnime> {
     }
   }
 
-  Future<void> _initPlayer(String currentSource) async {
-    // videoPlayerController = VideoPlayerController.network(
-    //     "https://wwwx16.gofcdn.com/videos/hls/7ijsY8JlZk-qqw95i2P8NA/1672162453/193235/7c84129bc367b093eef803077c63241b/ep.36.1666964540.1080.m3u8");
-    // await Future.wait([
-    //   videoPlayerController.initialize(),
-    // ]);
-    // chewieController = ChewieController(
-    //   videoPlayerController: videoPlayerController,
-    //   aspectRatio: 16 / 9,
-    //   autoPlay: true,
-    //   looping: false,
-    //   allowFullScreen: true,
-    //   allowMuting: true,
-    //   // allowPlaybackSpeedChanging: true,
-    //   showControls: true,
-    //   showControlsOnInitialize: true,
-    //   materialProgressColors: ChewieProgressColors(
-    //     playedColor: Colors.amber,
-    //     handleColor: Colors.amber,
-    //     backgroundColor: Colors.grey,
-    //     bufferedColor: Colors.amber,
-    //   ),
-    // );
-    _videoViewController = VlcPlayerController.network(currentSource,
-        hwAcc: HwAcc.auto, autoPlay: true, options: VlcPlayerOptions());
-  }
-
   @override
   void initState() {
     super.initState();
   }
 
+  void _updatePlayerSource(EpisodeSources currentSource) {
+    _player.setDataSource(currentSource.url, autoPlay: true);
+  }
+
   @override
-  void dispose() async {
+  void dispose() {
+    if (_player.state == FijkState.asyncPreparing) {
+      _player.stop();
+    }
+    _player.release();
     super.dispose();
-    _videoViewController!.stopRendererScanning();
-    _videoViewController!.dispose();
-    // videoPlayerController.dispose();
-    // chewieController?.dispose();
   }
 
   @override
@@ -104,22 +85,14 @@ class _WatchAnimeState extends State<WatchAnime> {
               // List<EpisodeSources> data = snapshot.data as List<EpisodeSources>;
               return Column(
                 children: [
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: _videoViewController != null
-                          ? VlcPlayer(
-                              controller: _videoViewController!,
-                              aspectRatio: 16 / 9,
-                            )
-                          : const Loading()),
-                  // SizedBox(
-                  //     height: MediaQuery.of(context).size.height * 0.3,
-                  //     child: chewieController != null
-                  //         ? Chewie(
-                  //             controller: chewieController!,
-                  //           )
-                  //         : const Loading()),
-
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: FijkView(
+                      player: _player,
+                      color: Colors.black,
+                      onDispose: (p0) => _player.release(),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -45,9 +45,7 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.0.15
   masonry_grid: ^1.0.0
-  flutter_vlc_player: ^7.1.5
-  # video_player: ^2.4.10
-  # chewie: ^1.3.6
+  fijkplayer: ^0.10.1
 
 dev_dependencies:
   flutter_test:

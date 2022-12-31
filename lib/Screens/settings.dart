@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -9,6 +10,11 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  void setPreferredQuality(String quality) async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setString("pref_quality", quality);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -51,7 +57,7 @@ class _SettingsState extends State<Settings> {
             IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, "/external", arguments: {
-                  "uri": "https://discord.com/invite/RNADXBTvcx"
+                  "uri": "https://discordapp.com/users/388546055098073090"
                 });
               },
               icon: FaIcon(FontAwesomeIcons.discord),
@@ -60,11 +66,43 @@ class _SettingsState extends State<Settings> {
           ],
         ),
         const SizedBox(height: 100),
-        Text(
-          "Features coming soon!!",
-          style: TextStyle(
-              fontSize: 17.0, fontFamily: "OpenSans", color: Colors.grey[300]),
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     const SizedBox(width: 20),
+        //     Text("Preferred quality: ",
+        //         style: TextStyle(
+        //             fontSize: 17.0,
+        //             fontFamily: "OpenSans",
+        //             color: Colors.grey[300])),
+        //     const SizedBox(width: 20),
+        //     DropdownButton<String>(
+        //       value: "1080p",
+        //       icon: const Icon(Icons.arrow_downward),
+        //       iconSize: 24,
+        //       elevation: 16,
+        //       style: TextStyle(color: Colors.grey[300]),
+        //       underline: Container(
+        //         height: 2,
+        //         color: Colors.grey[300],
+        //       ),
+        //       onChanged: (String? newValue) {
+        //         setPreferredQuality(newValue!);
+        //       },
+        //       items: <String>['1080p', '720p', '480p', '360p']
+        //           .map<DropdownMenuItem<String>>((String value) {
+        //         return DropdownMenuItem<String>(
+        //           value: value,
+        //           child: Text(value,
+        //               style: TextStyle(
+        //                   fontSize: 15.0,
+        //                   fontFamily: "OpenSans",
+        //                   color: Colors.grey[300])),
+        //         );
+        //       }).toList(),
+        //     ),
+        //   ],
+        // ),
       ],
     ));
   }

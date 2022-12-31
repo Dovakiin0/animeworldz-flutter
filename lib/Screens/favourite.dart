@@ -37,22 +37,26 @@ class _FavouriteState extends State<Favourite> {
           case ConnectionState.waiting:
             return const Loading();
           case ConnectionState.done:
-            return Center(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 30,
-                    children: snapshot.data!
-                        .map<Widget>(
-                          (anime) => AnimeCard(
-                            title: anime.title,
-                            additionalInfo: anime.additionalInfo,
-                            image: anime.img,
-                            link: anime.link,
-                          ),
-                        )
-                        .toList()),
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 30,
+                      children: snapshot.data!
+                          .map<Widget>(
+                            (anime) => AnimeCard(
+                              title: anime.title,
+                              additionalInfo:
+                                  "Released: " + anime.additionalInfo,
+                              image: anime.img,
+                              link: anime.link,
+                            ),
+                          )
+                          .toList()),
+                ],
               ),
             );
           default:

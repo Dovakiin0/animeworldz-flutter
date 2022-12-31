@@ -100,8 +100,8 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
 
   @pragma('vm:entry-point')
