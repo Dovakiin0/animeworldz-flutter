@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:package_info_plus/package_info_plus.dart";
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
@@ -13,6 +14,18 @@ class _SettingsState extends State<Settings> {
   void setPreferredQuality(String quality) async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.setString("pref_quality", quality);
+  }
+
+  String version = "";
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        version = packageInfo.version;
+      });
+    });
   }
 
   @override
@@ -66,6 +79,7 @@ class _SettingsState extends State<Settings> {
           ],
         ),
         const SizedBox(height: 100),
+        Text("Version: ${version}", style: TextStyle(fontSize: 18.0)),
         // Row(
         //   mainAxisAlignment: MainAxisAlignment.center,
         //   children: [
