@@ -39,24 +39,21 @@ class _FavouriteState extends State<Favourite> {
           case ConnectionState.done:
             return SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 30,
-                      children: snapshot.data!
-                          .map<Widget>(
-                            (anime) => AnimeCard(
-                              title: anime.title,
-                              additionalInfo:
-                                  "Released: " + anime.additionalInfo,
-                              image: anime.img,
-                              link: anime.link,
-                            ),
-                          )
-                          .toList()),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Wrap(
+                    direction: Axis.horizontal,
+                    spacing: 30,
+                    children: snapshot.data!
+                        .map<Widget>(
+                          (anime) => AnimeCard(
+                            title: anime.title,
+                            additionalInfo: "Released: " + anime.additionalInfo,
+                            image: anime.img,
+                            link: anime.link,
+                          ),
+                        )
+                        .toList()),
               ),
             );
           default:
