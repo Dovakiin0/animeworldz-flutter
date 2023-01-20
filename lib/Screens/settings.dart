@@ -23,7 +23,7 @@ class _SettingsState extends State<Settings> {
     super.initState();
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       setState(() {
-        version = packageInfo.version;
+        version = '${packageInfo.version}+${packageInfo.buildNumber}';
       });
     });
   }

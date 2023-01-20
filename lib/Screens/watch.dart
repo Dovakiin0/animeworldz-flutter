@@ -33,7 +33,7 @@ class _WatchAnimeState extends State<WatchAnime> {
             .toList();
 
         for (EpisodeSources source in sources) {
-          if (source.quality == "default") {
+          if (source.quality == "1080p") {
             currentSource = source;
             break;
           } else {
@@ -94,11 +94,14 @@ class _WatchAnimeState extends State<WatchAnime> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    direction: Axis.horizontal,
                     children: [
                       Text(
                         "${args["name"]} |",
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        softWrap: false,
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -115,6 +118,20 @@ class _WatchAnimeState extends State<WatchAnime> {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  // DropdownButton(
+                  //   icon: const Icon(Icons.arrow_downward),
+                  //   items: data
+                  //       .map((e) => DropdownMenuItem(
+                  //             child: Text(e.quality),
+                  //             value: e,
+                  //           ))
+                  //       .toList(),
+                  //   onChanged: (value) {
+                  //     currentSource = value as EpisodeSources;
+                  //     _updatePlayerSource(currentSource);
+                  //   },
+                  // ),
+                  // const SizedBox(height: 20),
                   Column(
                     children: [
                       args["ep"] <= args['count']
