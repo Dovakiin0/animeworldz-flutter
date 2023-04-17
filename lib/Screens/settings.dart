@@ -79,44 +79,11 @@ class _SettingsState extends State<Settings> {
           ],
         ),
         const SizedBox(height: 100),
-        Text("Version: ${version}", style: TextStyle(fontSize: 18.0)),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     const SizedBox(width: 20),
-        //     Text("Preferred quality: ",
-        //         style: TextStyle(
-        //             fontSize: 17.0,
-        //             fontFamily: "OpenSans",
-        //             color: Colors.grey[300])),
-        //     const SizedBox(width: 20),
-        //     DropdownButton<String>(
-        //       value: "1080p",
-        //       icon: const Icon(Icons.arrow_downward),
-        //       iconSize: 24,
-        //       elevation: 16,
-        //       style: TextStyle(color: Colors.grey[300]),
-        //       underline: Container(
-        //         height: 2,
-        //         color: Colors.grey[300],
-        //       ),
-        //       onChanged: (String? newValue) {
-        //         setPreferredQuality(newValue!);
-        //       },
-        //       items: <String>['1080p', '720p', '480p', '360p']
-        //           .map<DropdownMenuItem<String>>((String value) {
-        //         return DropdownMenuItem<String>(
-        //           value: value,
-        //           child: Text(value,
-        //               style: TextStyle(
-        //                   fontSize: 15.0,
-        //                   fontFamily: "OpenSans",
-        //                   color: Colors.grey[300])),
-        //         );
-        //       }).toList(),
-        //     ),
-        //   ],
-        // ),
+        Text("Version: ${version}",
+            style: TextStyle(
+                fontSize: 18.0,
+                fontFamily: "OpenSans",
+                color: Colors.grey[300])),
       ],
     ));
   }
