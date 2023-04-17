@@ -24,8 +24,8 @@ class _WatchAnimeState extends State<WatchAnime> {
       Map reqBody = {};
       reqBody["ep"] = args["ep"];
       reqBody["slug"] = args["slug"];
-      http.Response res = await http
-          .get(Uri.parse(API_URI + "/watch/${args["slug"]}?server=gogocdn"));
+      http.Response res = await http.get(
+          Uri.parse(API_URI + "/watch/${args["slug"]}?server=vidstreaming"));
       if (res.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(res.body);
         List<EpisodeSources> sources = data["sources"]
